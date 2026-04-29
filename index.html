@@ -107,16 +107,20 @@ button:hover {
   width:0%;
 }
 
-checkbox {
-  font-size:14px;
-  display:flex;
-  flex-direction:column; 
-  align-items:center;   
-  gap:8px;
-  margin:16px 0 20px;    
-  line-height:1.4;
-  text-align:center;     
-  color:#333;
+.checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px 0 20px;
+}
+
+.checkbox span {
+  text-align: center;
+  display: block;
+  width: 100%;   /* 👈 ESSENCIAL */
+  max-width: 300px; /* opcional, melhora leitura */
+  line-height: 1.5;
+  font-size: 14px;
 }
 </style>
 </head>
