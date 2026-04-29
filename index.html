@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Quiz CMMG Experience</title>
 
 <style>
@@ -99,7 +100,7 @@ button:hover {
 .checkbox span {
   display: block;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   font-size: 15px;
   line-height: 1.45;
   text-align: center;
@@ -169,7 +170,9 @@ button:hover {
     <h1>Descubra qual área da saúde combina mais com você</h1>
 
     <div id="lead">
-      <p>Preencha seus dados e responda ao quiz para descobrir sua afinidade com uma das graduações da Faculdade Ciências Médicas de Minas Gerais.</p>
+      <p>
+        Preencha seus dados e responda ao quiz para descobrir sua afinidade com uma das graduações da Faculdade Ciências Médicas de Minas Gerais.
+      </p>
 
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="email" id="email" placeholder="Seu e-mail">
@@ -419,21 +422,22 @@ function sendToGoogleSheets(resultado) {
   const telefone = document.getElementById("telefone").value.trim();
 
   const respostasTexto = answers.map((item, index) =>
-    `${index + 1}. ${item.pergunta}\n${item.letra}) ${item.resposta}`
+    `${index + 1}. ${item.pergunta}
+${item.letra}) ${item.resposta}`
   ).join("\n\n");
 
   fetch(GOOGLE_SHEETS_URL, {
-  method: "POST",
-  mode: "no-cors",
-  body: JSON.stringify({
-    nome: nome,
-    email: email,
-    telefone: telefone,
-    resultado: resultado,
-    respostas: respostasTexto,
-    aceite: "Sim"
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      nome: nome,
+      email: email,
+      telefone: telefone,
+      resultado: resultado,
+      respostas: respostasTexto,
+      aceite: "Sim"
+    })
   })
-});
   .then(() => {
     document.getElementById("statusEnvio").innerText =
       "Informações enviadas com sucesso.";
