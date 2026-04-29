@@ -13,7 +13,7 @@ button { width:100%; padding:12px; border:none; border-radius:8px; background:#0
 .option { display:block; margin:10px 0; padding:10px; border:1px solid #ddd; border-radius:8px; cursor:pointer; }
 .option:hover { background:#f0f0f0; }
 .hidden { display:none; }
-input { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; }
+input { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
 .progress { height:6px; background:#ddd; border-radius:10px; margin-bottom:15px; }
 .progress-bar { height:6px; background:#007BFF; border-radius:10px; width:0%; }
 </style>
@@ -28,7 +28,7 @@ input { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px s
       <p>Antes de começar, preencha seus dados:</p>
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="email" id="email" placeholder="Seu e-mail">
-      <button onclick="startQuiz()">Começar</button>
+      <button type="button" onclick="startQuiz()">Começar</button>
     </div>
 
     <div id="quiz" class="hidden">
@@ -55,12 +55,13 @@ let current = 0;
 let answers = [];
 
 function startQuiz(){
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('email').value;
-  if(!nome || !email){ alert('Preencha os dados'); return; }
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
 
-  // Simulação envio CRM
-  console.log('Lead capturado:', nome, email);
+  if(!nome || !email){
+    alert('Preencha nome e e-mail para começar.');
+    return;
+  }
 
   document.getElementById('lead').classList.add('hidden');
   document.getElementById('quiz').classList.remove('hidden');
@@ -76,20 +77,24 @@ function loadQuestion(){
 
   q.o.forEach((opt, index)=>{
     const btn = document.createElement('div');
-    btn.className='option';
-    btn.innerText=opt;
-    btn.onclick = ()=> selectOption(index);
+    btn.className = 'option';
+    btn.innerText = opt;
+    btn.onclick = () => selectOption(index);
     optionsDiv.appendChild(btn);
   });
 
-  document.getElementById('progressBar').style.width = ((current+1)/questions.length*100)+'%';
+  document.getElementById('progressBar').style.width = ((current + 1) / questions.length * 100) + '%';
 }
 
 function selectOption(i){
   answers.push(i);
   current++;
-  if(current < questions.length){ loadQuestion(); }
-  else showResult();
+
+  if(current < questions.length){
+    loadQuestion();
+  } else {
+    showResult();
+  }
 }
 
 function showResult(){
@@ -97,7 +102,7 @@ function showResult(){
   document.getElementById('result').classList.remove('hidden');
 
   let count = [0,0,0,0,0,0];
-  answers.forEach(a=> count[a]++);
+  answers.forEach(a => count[a]++);
   let maxIndex = count.indexOf(Math.max(...count));
 
   const cursos = [
@@ -114,26 +119,34 @@ function showResult(){
   document.getElementById('result').innerHTML = `
     <h2>Seu resultado: ${resultado.nome}</h2>
     <p>${resultado.desc}</p>
-    <button onclick="sendWhatsApp('${resultado.nome}')">Quero saber mais</button>
+    <button type="button" onclick="sendWhatsApp('${resultado.nome}')">Quero saber mais</button>
   `;
 }
 
 function sendWhatsApp(curso){
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('email').value;
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
 
-  let respostasTexto = answers.map((a,i)=> `Q${i+1}: ${questions[i].o[a]}`).join('%0A');
+  const respostasTexto = answers
+    .map((a, i) => `Q${i + 1}: ${questions[i].o[a]}`)
+    .join('\n');
 
-  const msg = encodeURIComponent(
-`Olá! Novo lead do quiz:%0A%0A👤 Nome: ${nome}%0A📧 Email: ${email}%0A🎯 Resultado: ${curso}%0A%0A📝 Respostas:%0A${respostasTexto}`
-  );
+  const textoMensagem =
+`Olá! Novo lead do quiz:
 
-  // ⚠️ TROQUE PELO SEU NÚMERO COM DDD (ex: 5531999999999)
+👤 Nome: ${nome}
+📧 Email: ${email}
+🎯 Resultado: ${curso}
+
+📝 Respostas:
+${respostasTexto}`;
+
+  const msg = encodeURIComponent(textoMensagem);
+
+  // Número com DDD já configurado
   const telefone = '5531988913888';
 
-  window.open(`https://wa.me/${telefone}?text=${msg}`,'_blank');
-}. Quero mais informações!`);
-  window.open(`https://wa.me/5531988913888?text=${msg}`,'_blank');
+  window.open(`https://wa.me/${telefone}?text=${msg}`, '_blank');
 }
 </script>
 
