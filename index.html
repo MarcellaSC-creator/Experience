@@ -3,51 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Área da Saúde</title>
+<title>Quiz CMMG Experience</title>
+
 <style>
 body {
-  font-family: Arial, sans-serif;
   margin:0;
+  font-family: Arial, sans-serif;
   min-height:100vh;
 
-  background-image: url('fundo.png');
+  background-image: url('fundo.png'); /* ⚠️ coloque aqui o nome da sua imagem */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
-button { width:100%; padding:12px; border:none; border-radius:8px; background:#007BFF; color:#fff; font-size:16px; cursor:pointer; }
-.option { display:block; margin:10px 0; padding:10px; border:1px solid #ddd; border-radius:8px; cursor:pointer; }
-.option:hover { background:#f0f0f0; }
-.hidden { display:none; }
-input { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
-.progress { height:6px; background:#ddd; border-radius:10px; margin-bottom:15px; }
-.progress-bar { height:6px; background:#007BFF; border-radius:10px; width:0%; }
+
+body::before {
+  content:'';
+  position:fixed;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.35);
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+.container {
+  max-width:500px;
+  margin:auto;
+  padding:30px 20px;
+}
+
+.card {
+  background: rgba(255,255,255,0.95);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.3);
+}
+
+h1 {
+  color:#003b70;
+  margin-bottom:10px;
+}
+
+p {
+  font-size:14px;
+  color:#333;
+}
+
+input {
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+button {
+  width:100%;
+  padding:14px;
+  background:#0077c8;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+button:hover {
+  background:#005fa3;
+}
+
+.option {
+  padding:12px;
+  margin:8px 0;
+  border:1px solid #ddd;
+  border-radius:10px;
+  cursor:pointer;
+  background:#f7f7f7;
+}
+
+.option:hover {
+  background:#e0f3f3;
+}
+
+.hidden {
+  display:none;
+}
+
+.progress {
+  height:8px;
+  background:#ddd;
+  border-radius:10px;
+  margin-bottom:15px;
+}
+
+.progress-bar {
+  height:8px;
+  background:#00a3a3;
+  border-radius:10px;
+  width:0%;
+}
+
+.checkbox {
+  font-size:12px;
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
   <div class="card">
+
     <h1>Descubra sua área na saúde</h1>
 
+    <!-- LEAD -->
     <div id="lead">
-      <p>Antes de começar, preencha seus dados:</p>
+      <p>Preencha seus dados para começar:</p>
+
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="email" id="email" placeholder="Seu e-mail">
-      <button type="button" onclick="startQuiz()">Começar</button>
+
+      <label class="checkbox">
+        <input type="checkbox" id="aceite">
+        Aceito receber informações da Faculdade Ciências Médicas de MG
+      </label>
+
+      <button onclick="startQuiz()">Começar</button>
     </div>
 
+    <!-- QUIZ -->
     <div id="quiz" class="hidden">
-      <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+      <div class="progress">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
       <p id="question"></p>
       <div id="options"></div>
     </div>
 
+    <!-- RESULTADO -->
     <div id="result" class="hidden"></div>
+
   </div>
 </div>
 
 <script>
+
 const questions = [
   { q: "Ambiente ideal?", o:["Cuidar pessoas","Reabilitação","Comunicação","Diagnóstico","Procedimentos","Emoções"] },
   { q: "Atividade preferida?", o:["Cuidar","Exercícios","Fala","Estudar corpo","Clínico","Acolher"] },
@@ -63,14 +170,21 @@ let answers = [];
 function startQuiz(){
   const nome = document.getElementById('nome').value.trim();
   const email = document.getElementById('email').value.trim();
+  const aceite = document.getElementById('aceite').checked;
 
   if(!nome || !email){
-    alert('Preencha nome e e-mail para começar.');
+    alert("Preencha seus dados.");
+    return;
+  }
+
+  if(!aceite){
+    alert("Você precisa aceitar receber informações.");
     return;
   }
 
   document.getElementById('lead').classList.add('hidden');
   document.getElementById('quiz').classList.remove('hidden');
+
   loadQuestion();
 }
 
@@ -83,13 +197,14 @@ function loadQuestion(){
 
   q.o.forEach((opt, index)=>{
     const btn = document.createElement('div');
-    btn.className = 'option';
-    btn.innerText = opt;
-    btn.onclick = () => selectOption(index);
+    btn.className='option';
+    btn.innerText=opt;
+    btn.onclick = ()=> selectOption(index);
     optionsDiv.appendChild(btn);
   });
 
-  document.getElementById('progressBar').style.width = ((current + 1) / questions.length * 100) + '%';
+  document.getElementById('progressBar').style.width =
+    ((current+1)/questions.length*100)+'%';
 }
 
 function selectOption(i){
@@ -109,51 +224,55 @@ function showResult(){
 
   let count = [0,0,0,0,0,0];
   answers.forEach(a => count[a]++);
-  let maxIndex = count.indexOf(Math.max(...count));
+
+  let max = count.indexOf(Math.max(...count));
 
   const cursos = [
-    {nome:"Enfermagem", desc:"Você tem perfil cuidador e atua bem diretamente com pacientes."},
-    {nome:"Fisioterapia", desc:"Você gosta de movimento e reabilitação física."},
-    {nome:"Fonoaudiologia", desc:"Seu foco é comunicação e linguagem."},
-    {nome:"Medicina", desc:"Perfil analítico, diagnóstico e decisões importantes."},
-    {nome:"Odontologia", desc:"Alta precisão e habilidades manuais."},
-    {nome:"Psicologia", desc:"Grande empatia e interesse em comportamento humano."}
+    {nome:"Enfermagem", desc:"Perfil cuidador, próximo do paciente e essencial na assistência."},
+    {nome:"Fisioterapia", desc:"Foco em movimento, reabilitação e qualidade de vida."},
+    {nome:"Fonoaudiologia", desc:"Comunicação, linguagem e desenvolvimento humano."},
+    {nome:"Medicina", desc:"Diagnóstico, tomada de decisão e impacto direto na vida das pessoas."},
+    {nome:"Odontologia", desc:"Precisão técnica e cuidado com a saúde bucal."},
+    {nome:"Psicologia", desc:"Compreensão do comportamento e saúde emocional."}
   ];
 
-  const resultado = cursos[maxIndex];
+  const resultado = cursos[max];
 
   document.getElementById('result').innerHTML = `
-    <h2>Seu resultado: ${resultado.nome}</h2>
+    <h2>${resultado.nome}</h2>
     <p>${resultado.desc}</p>
-    <button type="button" onclick="sendWhatsApp('${resultado.nome}')">Quero saber mais</button>
+    <button onclick="sendWhatsApp('${resultado.nome}')">
+      Falar com um especialista
+    </button>
   `;
 }
 
 function sendWhatsApp(curso){
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
+  const nome = document.getElementById('nome').value;
+  const email = document.getElementById('email').value;
 
-  const respostasTexto = answers
-    .map((a, i) => `Q${i + 1}: ${questions[i].o[a]}`)
-    .join('\n');
+  let respostas = answers.map((a,i)=>
+    `Q${i+1}: ${questions[i].o[a]}`
+  ).join('\\n');
 
-  const textoMensagem =
-`Olá! Novo lead do quiz:
+  const texto =
+`Novo lead do quiz:
 
-👤 Nome: ${nome}
-📧 Email: ${email}
-🎯 Resultado: ${curso}
+Nome: ${nome}
+Email: ${email}
+Aceitou comunicação: SIM
+Resultado: ${curso}
 
-📝 Respostas:
-${respostasTexto}`;
+Respostas:
+${respostas}`;
 
-  const msg = encodeURIComponent(textoMensagem);
+  const msg = encodeURIComponent(texto);
 
-  // Número com DDD já configurado
-  const telefone = '5531988913888';
+  const telefone = '5531988913888'; // SEU NÚMERO
 
   window.open(`https://wa.me/${telefone}?text=${msg}`, '_blank');
 }
+
 </script>
 
 </body>
