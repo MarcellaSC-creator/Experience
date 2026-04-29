@@ -6,121 +6,151 @@
 <title>Quiz CMMG Experience</title>
 
 <style>
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  min-height:100vh;
+* {
+  box-sizing: border-box;
+}
 
-  background-image: url('fundo.png'); /* ⚠️ coloque aqui o nome da sua imagem */
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-image: url('fundo.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 body::before {
-  content:'';
-  position:fixed;
-  width:100%;
-  height:100%;
-  background: rgba(0,0,0,0.35);
-  top:0;
-  left:0;
-  z-index:-1;
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 80, 75, 0.35);
+  z-index: -1;
 }
 
 .container {
-  max-width:500px;
-  margin:auto;
-  padding:30px 20px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
 .card {
-  background: rgba(255,255,255,0.95);
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.3);
+  background: rgba(255, 255, 255, 0.94);
+  padding: 32px;
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
 }
 
 h1 {
-  color:#003b70;
-  margin-bottom:10px;
+  color: #003b70;
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+h2 {
+  color: #003b70;
 }
 
 p {
-  font-size:14px;
-  color:#333;
+  color: #333;
+  line-height: 1.5;
 }
 
-input {
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
-  border:1px solid #ccc;
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  padding: 13px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
 }
 
 button {
-  width:100%;
-  padding:14px;
-  background:#0077c8;
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  font-size:16px;
-  cursor:pointer;
-  font-weight:bold;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #0077c8;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 12px;
 }
 
 button:hover {
-  background:#005fa3;
-  margin-top:10px;
-}
-
-.option {
-  padding:12px;
-  margin:8px 0;
-  border:1px solid #ddd;
-  border-radius:10px;
-  cursor:pointer;
-  background:#f7f7f7;
-}
-
-.option:hover {
-  background:#e0f3f3;
-}
-
-.hidden {
-  display:none;
-}
-
-.progress {
-  height:8px;
-  background:#ddd;
-  border-radius:10px;
-  margin-bottom:15px;
-}
-
-.progress-bar {
-  height:8px;
-  background:#00a3a3;
-  border-radius:10px;
-  width:0%;
+  background: #005fa3;
 }
 
 .checkbox {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 16px 0 20px;
+  margin: 18px 0 24px;
+  text-align: center;
+}
+
+.checkbox input {
+  transform: scale(1.25);
+  margin-bottom: 8px;
 }
 
 .checkbox span {
-  text-align: center;
   display: block;
-  width: 100%;   /* 👈 ESSENCIAL */
-  max-width: 300px; /* opcional, melhora leitura */
-  line-height: 1.5;
-  font-size: 14px;
+  width: 100%;
+  max-width: 360px;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: center;
+  color: #333;
+}
+
+.hidden {
+  display: none;
+}
+
+.progress {
+  height: 8px;
+  background: #d9e6ef;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #00a99d;
+  border-radius: 20px;
+  width: 0%;
+}
+
+.question-number {
+  font-weight: bold;
+  color: #0077c8;
+  margin-bottom: 6px;
+}
+
+.option {
+  background: #f8fbff;
+  border: 1px solid #d5e2ec;
+  border-radius: 12px;
+  padding: 13px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.option:hover {
+  background: #e5f7f5;
+  border-color: #00a99d;
+}
+
+.result-box {
+  background: #f0fbfa;
+  border-left: 5px solid #00a99d;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 18px 0;
 }
 </style>
 </head>
@@ -132,160 +162,255 @@ button:hover {
 
     <h1>Descubra sua área na saúde</h1>
 
-    <!-- LEAD -->
     <div id="lead">
-      <p>Preencha seus dados para começar:</p>
+      <p>Responda ao quiz e descubra qual graduação da área da saúde mais combina com você.</p>
 
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="email" id="email" placeholder="Seu e-mail">
 
       <label class="checkbox">
-  <input type="checkbox" id="aceite">
-  <span>
-    Aceito receber informações sobre a<br>
-    <strong>Faculdade Ciências Médicas de Minas Gerais</strong>
-  </span>
-</label>
+        <input type="checkbox" id="aceite">
+        <span>
+          Aceito receber informações sobre a<br>
+          <strong>Faculdade Ciências Médicas de Minas Gerais</strong>
+        </span>
+      </label>
 
-      <button onclick="startQuiz()">Começar</button>
+      <button type="button" onclick="startQuiz()">Começar o quiz</button>
     </div>
 
-    <!-- QUIZ -->
     <div id="quiz" class="hidden">
       <div class="progress">
         <div id="progressBar" class="progress-bar"></div>
       </div>
 
-      <p id="question"></p>
+      <div class="question-number" id="questionNumber"></div>
+      <h2 id="question"></h2>
       <div id="options"></div>
     </div>
 
-    <!-- RESULTADO -->
     <div id="result" class="hidden"></div>
 
   </div>
 </div>
 
 <script>
-
 const questions = [
-  { q: "Ambiente ideal?", o:["Cuidar pessoas","Reabilitação","Comunicação","Diagnóstico","Procedimentos","Emoções"] },
-  { q: "Atividade preferida?", o:["Cuidar","Exercícios","Fala","Estudar corpo","Clínico","Acolher"] },
-  { q: "Como resolve problemas?", o:["Empatia","Prático","Comunicação","Investigação","Técnica","Emoção"] },
-  { q: "Maior habilidade?", o:["Cuidado","Coordenação","Comunicação","Lógica","Precisão","Empatia"] },
-  { q: "Cenário ideal?", o:["Hospital","Reabilitação","Fala","Diagnóstico","Consultório","Terapia"] },
-  { q: "Motivação?", o:["Cuidar","Recuperar","Comunicar","Salvar","Estética","Mental"] }
+  {
+    q: "Em um ambiente de trabalho ideal, você prefere:",
+    o: [
+      { letra: "A", texto: "Cuidar diretamente de pessoas em diferentes estados de saúde" },
+      { letra: "B", texto: "Ajudar na reabilitação física e recuperação de movimentos" },
+      { letra: "C", texto: "Trabalhar com comunicação, voz e expressão" },
+      { letra: "D", texto: "Diagnosticar problemas complexos e tomar decisões críticas" },
+      { letra: "E", texto: "Realizar procedimentos técnicos e trabalhar com precisão manual" },
+      { letra: "F", texto: "Ouvir, acolher e compreender emoções e comportamentos" }
+    ]
+  },
+  {
+    q: "Qual dessas atividades mais te atrai?",
+    o: [
+      { letra: "A", texto: "Monitorar pacientes e prestar cuidados contínuos" },
+      { letra: "B", texto: "Aplicar exercícios e terapias físicas" },
+      { letra: "C", texto: "Trabalhar fala, audição e linguagem" },
+      { letra: "D", texto: "Estudar o corpo humano profundamente e investigar doenças" },
+      { letra: "E", texto: "Realizar procedimentos clínicos detalhados" },
+      { letra: "F", texto: "Conversar e ajudar pessoas a lidarem com seus sentimentos" }
+    ]
+  },
+  {
+    q: "Como você costuma lidar com problemas?",
+    o: [
+      { letra: "A", texto: "Com empatia e foco no cuidado imediato" },
+      { letra: "B", texto: "Pensando em soluções práticas e reabilitação" },
+      { letra: "C", texto: "Buscando melhorar a comunicação e compreensão" },
+      { letra: "D", texto: "Investigando causas e tomando decisões assertivas" },
+      { letra: "E", texto: "Agindo com precisão e técnica" },
+      { letra: "F", texto: "Refletindo sobre emoções e comportamentos envolvidos" }
+    ]
+  },
+  {
+    q: "Qual habilidade você considera mais forte em você?",
+    o: [
+      { letra: "A", texto: "Cuidado e atenção ao outro" },
+      { letra: "B", texto: "Coordenação motora e percepção corporal" },
+      { letra: "C", texto: "Comunicação e escuta ativa" },
+      { letra: "D", texto: "Raciocínio lógico e tomada de decisão" },
+      { letra: "E", texto: "Habilidade manual e atenção aos detalhes" },
+      { letra: "F", texto: "Empatia e análise emocional" }
+    ]
+  },
+  {
+    q: "Qual cenário profissional mais te interessa?",
+    o: [
+      { letra: "A", texto: "Hospital, atuando diretamente com pacientes" },
+      { letra: "B", texto: "Clínica de reabilitação ou esportiva" },
+      { letra: "C", texto: "Consultório de linguagem e audição" },
+      { letra: "D", texto: "Hospital ou clínica com foco em diagnóstico e tratamento" },
+      { letra: "E", texto: "Consultório odontológico" },
+      { letra: "F", texto: "Consultório ou clínica terapêutica" }
+    ]
+  },
+  {
+    q: "O que mais te motiva na área da saúde?",
+    o: [
+      { letra: "A", texto: "Cuidar e acompanhar a evolução dos pacientes" },
+      { letra: "B", texto: "Ajudar pessoas a recuperarem movimentos e qualidade de vida" },
+      { letra: "C", texto: "Melhorar a comunicação e inclusão social" },
+      { letra: "D", texto: "Salvar vidas e resolver casos complexos" },
+      { letra: "E", texto: "Transformar sorrisos e saúde bucal" },
+      { letra: "F", texto: "Promover saúde mental e bem-estar emocional" }
+    ]
+  }
 ];
+
+const results = {
+  A: {
+    curso: "Enfermagem",
+    desc: "Perfil cuidador, atento e essencial no acompanhamento do paciente."
+  },
+  B: {
+    curso: "Fisioterapia",
+    desc: "Foco em reabilitação, movimento e recuperação funcional."
+  },
+  C: {
+    curso: "Fonoaudiologia",
+    desc: "Interesse por comunicação, linguagem e desenvolvimento humano."
+  },
+  D: {
+    curso: "Medicina",
+    desc: "Perfil investigativo, decisivo e voltado para diagnóstico e tratamento."
+  },
+  E: {
+    curso: "Odontologia",
+    desc: "Habilidade técnica, precisão e foco em saúde bucal."
+  },
+  F: {
+    curso: "Psicologia",
+    desc: "Afinidade com comportamento humano, escuta e saúde mental."
+  }
+};
 
 let current = 0;
 let answers = [];
 
-function startQuiz(){
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const aceite = document.getElementById('aceite').checked;
+function startQuiz() {
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const aceite = document.getElementById("aceite").checked;
 
-  if(!nome || !email){
-    alert("Preencha seus dados.");
+  if (!nome || !email) {
+    alert("Preencha seu nome e e-mail para começar.");
     return;
   }
 
-  if(!aceite){
-    alert("Você precisa aceitar receber informações.");
+  if (!aceite) {
+    alert("Você precisa aceitar receber informações para continuar.");
     return;
   }
 
-  document.getElementById('lead').classList.add('hidden');
-  document.getElementById('quiz').classList.remove('hidden');
+  document.getElementById("lead").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
 
   loadQuestion();
 }
 
-function loadQuestion(){
-  const q = questions[current];
-  document.getElementById('question').innerText = q.q;
+function loadQuestion() {
+  const question = questions[current];
 
-  const optionsDiv = document.getElementById('options');
-  optionsDiv.innerHTML = '';
+  document.getElementById("questionNumber").innerText =
+    `Pergunta ${current + 1} de ${questions.length}`;
 
-  q.o.forEach((opt, index)=>{
-    const btn = document.createElement('div');
-    btn.className='option';
-    btn.innerText=opt;
-    btn.onclick = ()=> selectOption(index);
-    optionsDiv.appendChild(btn);
+  document.getElementById("question").innerText = question.q;
+
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  question.o.forEach(option => {
+    const div = document.createElement("div");
+    div.className = "option";
+    div.innerHTML = `<strong>${option.letra})</strong> ${option.texto}`;
+    div.onclick = () => selectOption(option.letra, option.texto);
+    optionsDiv.appendChild(div);
   });
 
-  document.getElementById('progressBar').style.width =
-    ((current+1)/questions.length*100)+'%';
+  document.getElementById("progressBar").style.width =
+    `${((current + 1) / questions.length) * 100}%`;
 }
 
-function selectOption(i){
-  answers.push(i);
+function selectOption(letra, texto) {
+  answers.push({
+    pergunta: questions[current].q,
+    letra: letra,
+    resposta: texto
+  });
+
   current++;
 
-  if(current < questions.length){
+  if (current < questions.length) {
     loadQuestion();
   } else {
     showResult();
   }
 }
 
-function showResult(){
-  document.getElementById('quiz').classList.add('hidden');
-  document.getElementById('result').classList.remove('hidden');
+function showResult() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
 
-  let count = [0,0,0,0,0,0];
-  answers.forEach(a => count[a]++);
+  const count = { A:0, B:0, C:0, D:0, E:0, F:0 };
 
-  let max = count.indexOf(Math.max(...count));
+  answers.forEach(item => {
+    count[item.letra]++;
+  });
 
-  const cursos = [
-    {nome:"Enfermagem", desc:"Perfil cuidador, próximo do paciente e essencial na assistência."},
-    {nome:"Fisioterapia", desc:"Foco em movimento, reabilitação e qualidade de vida."},
-    {nome:"Fonoaudiologia", desc:"Comunicação, linguagem e desenvolvimento humano."},
-    {nome:"Medicina", desc:"Diagnóstico, tomada de decisão e impacto direto na vida das pessoas."},
-    {nome:"Odontologia", desc:"Precisão técnica e cuidado com a saúde bucal."},
-    {nome:"Psicologia", desc:"Compreensão do comportamento e saúde emocional."}
-  ];
+  const winner = Object.keys(count).reduce((a, b) =>
+    count[a] >= count[b] ? a : b
+  );
 
-  const resultado = cursos[max];
+  const result = results[winner];
 
-  document.getElementById('result').innerHTML = `
-    <h2>${resultado.nome}</h2>
-    <p>${resultado.desc}</p>
-    <button onclick="sendWhatsApp('${resultado.nome}')">
+  document.getElementById("result").innerHTML = `
+    <h2>Seu resultado: ${result.curso}</h2>
+
+    <div class="result-box">
+      <p>${result.desc}</p>
+    </div>
+
+    <p>Quer saber mais sobre essa graduação na Faculdade Ciências Médicas de Minas Gerais?</p>
+
+    <button type="button" onclick="sendWhatsApp('${result.curso}')">
       Falar com um especialista
     </button>
   `;
 }
 
-function sendWhatsApp(curso){
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('email').value;
+function sendWhatsApp(curso) {
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
 
-  let respostas = answers.map((a,i)=>
-    `Q${i+1}: ${questions[i].o[a]}`
-  ).join('\\n');
+  const respostasTexto = answers.map((item, index) =>
+    `${index + 1}. ${item.pergunta}
+${item.letra}) ${item.resposta}`
+  ).join("\\n\\n");
 
-  const texto =
-`Novo lead do quiz:
+  const textoMensagem =
+`Olá! Novo lead do quiz CMMG Experience:
 
 Nome: ${nome}
-Email: ${email}
-Aceitou comunicação: SIM
+E-mail: ${email}
+Aceitou receber informações: Sim
 Resultado: ${curso}
 
 Respostas:
-${respostas}`;
+${respostasTexto}`;
 
-  const msg = encodeURIComponent(texto);
+  const msg = encodeURIComponent(textoMensagem);
 
-  const telefone = '5531988913888'; // SEU NÚMERO
+  const telefone = "5531988913888";
 
-  window.open(`https://wa.me/${telefone}?text=${msg}`, '_blank');
+  window.open(`https://wa.me/${telefone}?text=${msg}`, "_blank");
 }
-
 </script>
 
 </body>
