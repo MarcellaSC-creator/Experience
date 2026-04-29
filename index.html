@@ -35,7 +35,7 @@ body::before {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.95);
   padding: 32px;
   border-radius: 22px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
@@ -43,7 +43,7 @@ body::before {
 
 h1 {
   color: #003b70;
-  font-size: 32px;
+  font-size: 30px;
   margin-bottom: 12px;
 }
 
@@ -152,6 +152,12 @@ button:hover {
   border-radius: 12px;
   margin: 18px 0;
 }
+
+.status {
+  font-size: 13px;
+  color: #555;
+  margin-top: 14px;
+}
 </style>
 </head>
 
@@ -160,10 +166,10 @@ button:hover {
 <div class="container">
   <div class="card">
 
-    <h1>Descubra sua área na saúde</h1>
+    <h1>Descubra qual área da saúde combina mais com você</h1>
 
     <div id="lead">
-      <p>Responda ao quiz e descubra qual graduação da área da saúde mais combina com você.</p>
+      <p>Preencha seus dados e responda ao quiz para descobrir sua afinidade com uma das graduações da Faculdade Ciências Médicas de Minas Gerais.</p>
 
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="email" id="email" placeholder="Seu e-mail">
@@ -195,6 +201,8 @@ button:hover {
 </div>
 
 <script>
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycby_zhQFoBuzZlCI8fYrhP4m3G_7PtJ65NAzWYxrYLsEYSOoqZQuyEsMPjtFr56ewNM/exec";
+
 const questions = [
   {
     q: "Em um ambiente de trabalho ideal, você prefere:",
@@ -293,6 +301,7 @@ const results = {
 
 let current = 0;
 let answers = [];
+let finalResult = null;
 
 function startQuiz() {
   const nome = document.getElementById("nome").value.trim();
@@ -368,48 +377,50 @@ function showResult() {
     count[a] >= count[b] ? a : b
   );
 
-  const result = results[winner];
+  finalResult = results[winner];
 
   document.getElementById("result").innerHTML = `
-    <h2>Seu resultado: ${result.curso}</h2>
+    <h2>Seu resultado: ${finalResult.curso}</h2>
 
     <div class="result-box">
-      <p>${result.desc}</p>
+      <p>${finalResult.desc}</p>
     </div>
 
-    <p>Quer saber mais sobre essa graduação na Faculdade Ciências Médicas de Minas Gerais?</p>
+    <p>Seus dados foram registrados. Em breve, você poderá receber informações sobre a Faculdade Ciências Médicas de Minas Gerais.</p>
 
-    <button type="button" onclick="sendWhatsApp('${result.curso}')">
-      Fale conosco!
-    </button>
+    <p class="status" id="statusEnvio">Enviando suas informações...</p>
   `;
+
+  sendToGoogleSheets(finalResult.curso);
 }
 
-function sendWhatsApp(curso) {
+function sendToGoogleSheets(resultado) {
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
 
-const respostasTexto = answers.map((item, index) =>
-  `${index + 1}. ${item.pergunta}
-${item.letra}) ${item.resposta}`
-).join("\n\n");
+  const respostasTexto = answers.map((item, index) =>
+    `${index + 1}. ${item.pergunta}\n${item.letra}) ${item.resposta}`
+  ).join("\n\n");
 
-  const textoMensagem =
-`Olá! Novo lead do quiz CMMG Experience:
-
-Nome: ${nome}
-E-mail: ${email}
-Aceitou receber informações: Sim
-Resultado: ${curso}
-
-Respostas:
-${respostasTexto}`;
-
-  const msg = encodeURIComponent(textoMensagem);
-
-  const telefone = "5531988913888";
-
-  window.open(`https://wa.me/${telefone}?text=${msg}`, "_blank");
+  fetch(GOOGLE_SHEETS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      nome: nome,
+      email: email,
+      resultado: resultado,
+      respostas: respostasTexto,
+      aceite: "Sim"
+    })
+  })
+  .then(() => {
+    document.getElementById("statusEnvio").innerText =
+      "Informações enviadas com sucesso.";
+  })
+  .catch(() => {
+    document.getElementById("statusEnvio").innerText =
+      "Resultado gerado. Caso o envio não apareça na planilha, revise a configuração do Apps Script.";
+  });
 }
 </script>
 
