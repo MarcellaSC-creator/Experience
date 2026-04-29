@@ -389,10 +389,10 @@ function sendWhatsApp(curso) {
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
 
-  const respostasTexto = answers.map((item, index) =>
-    `${index + 1}. ${item.pergunta}
+const respostasTexto = answers.map((item, index) =>
+  `${index + 1}. ${item.pergunta}
 ${item.letra}) ${item.resposta}`
-  ).join("\\n\\n");
+).join("\n\n");
 
   const textoMensagem =
 `Olá! Novo lead do quiz CMMG Experience:
