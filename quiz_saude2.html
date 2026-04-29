@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Área da Saúde</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; background:#f4f6f9; }
+.container { max-width:500px; margin:auto; padding:20px; }
+.card { background:#fff; padding:25px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+h1 { text-align:center; }
+button { width:100%; padding:12px; border:none; border-radius:8px; background:#007BFF; color:#fff; font-size:16px; cursor:pointer; }
+.option { display:block; margin:10px 0; padding:10px; border:1px solid #ddd; border-radius:8px; cursor:pointer; }
+.option:hover { background:#f0f0f0; }
+.hidden { display:none; }
+input { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; }
+.progress { height:6px; background:#ddd; border-radius:10px; margin-bottom:15px; }
+.progress-bar { height:6px; background:#007BFF; border-radius:10px; width:0%; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>Descubra sua área na saúde</h1>
+
+    <div id="lead">
+      <p>Antes de começar, preencha seus dados:</p>
+      <input type="text" id="nome" placeholder="Seu nome" required>
+      <input type="email" id="email" placeholder="Seu e-mail" required>
+      <button onclick="startQuiz()">Começar</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+      <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+      <p id="question"></p>
+      <div id="options"></div>
+    </div>
+
+    <div id="result" class="hidden"></div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  { q: "Ambiente ideal?", o:["Cuidar pessoas","Reabilitação","Comunicação","Diagnóstico","Procedimentos","Emoções"] },
+  { q: "Atividade preferida?", o:["Cuidar","Exercícios","Fala","Estudar corpo","Clínico","Acolher"] },
+  { q: "Como resolve problemas?", o:["Empatia","Prático","Comunicação","Investigação","Técnica","Emoção"] },
+  { q: "Maior habilidade?", o:["Cuidado","Coordenação","Comunicação","Lógica","Precisão","Empatia"] },
+  { q: "Cenário ideal?", o:["Hospital","Reabilitação","Fala","Diagnóstico","Consultório","Terapia"] },
+  { q: "Motivação?", o:["Cuidar","Recuperar","Comunicar","Salvar","Estética","Mental"] }
+];
+
+let current = 0;
+let answers = [];
+
+function startQuiz(){
+  const nome = document.getElementById('nome').value;
+  const email = document.getElementById('email').value;
+  if(!nome || !email){ alert('Preencha os dados'); return; }
+
+  // Simulação envio CRM
+  console.log('Lead capturado:', nome, email);
+
+  document.getElementById('lead').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const q = questions[current];
+  document.getElementById('question').innerText = q.q;
+
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
+
+  q.o.forEach((opt, index)=>{
+    const btn = document.createElement('div');
+    btn.className='option';
+    btn.innerText=opt;
+    btn.onclick = ()=> selectOption(index);
+    optionsDiv.appendChild(btn);
+  });
+
+  document.getElementById('progressBar').style.width = ((current+1)/questions.length*100)+'%';
+}
+
+function selectOption(i){
+  answers.push(i);
+  current++;
+  if(current < questions.length){ loadQuestion(); }
+  else showResult();
+}
+
+function showResult(){
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+
+  let count = [0,0,0,0,0,0];
+  answers.forEach(a=> count[a]++);
+  let maxIndex = count.indexOf(Math.max(...count));
+
+  const cursos = [
+    {nome:"Enfermagem", desc:"Você tem perfil cuidador e atua bem diretamente com pacientes."},
+    {nome:"Fisioterapia", desc:"Você gosta de movimento e reabilitação física."},
+    {nome:"Fonoaudiologia", desc:"Seu foco é comunicação e linguagem."},
+    {nome:"Medicina", desc:"Perfil analítico, diagnóstico e decisões importantes."},
+    {nome:"Odontologia", desc:"Alta precisão e habilidades manuais."},
+    {nome:"Psicologia", desc:"Grande empatia e interesse em comportamento humano."}
+  ];
+
+  const resultado = cursos[maxIndex];
+
+  document.getElementById('result').innerHTML = `
+    <h2>Seu resultado: ${resultado.nome}</h2>
+    <p>${resultado.desc}</p>
+    <button onclick="sendWhatsApp('${resultado.nome}')">Quero saber mais</button>
+  `;
+}
+
+function sendWhatsApp(curso){
+  const nome = document.getElementById('nome').value;
+  const email = document.getElementById('email').value;
+
+  let respostasTexto = answers.map((a,i)=> `Q${i+1}: ${questions[i].o[a]}`).join('%0A');
+
+  const msg = encodeURIComponent(
+`Olá! Novo lead do quiz:%0A%0A👤 Nome: ${nome}%0A📧 Email: ${email}%0A🎯 Resultado: ${curso}%0A%0A📝 Respostas:%0A${respostasTexto}`
+  );
+
+  // ⚠️ TROQUE PELO SEU NÚMERO COM DDD (ex: 5531999999999)
+  const telefone = '5531988913888';
+
+  window.open(`https://wa.me/${telefone}?text=${msg}`,'_blank');
+}. Quero mais informações!`);
+  window.open(`https://wa.me/5531988913888?text=${msg}`,'_blank');
+}
+</script>
+
+</body>
+</html>
