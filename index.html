@@ -423,17 +423,17 @@ function sendToGoogleSheets(resultado) {
   ).join("\n\n");
 
   fetch(GOOGLE_SHEETS_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify({
-      nome: nome,
-      email: email,
-      telefone: telefone,
-      resultado: resultado,
-      respostas: respostasTexto,
-      aceite: "Sim"
-    })
+  method: "POST",
+  mode: "no-cors",
+  body: JSON.stringify({
+    nome: nome,
+    email: email,
+    telefone: telefone,
+    resultado: resultado,
+    respostas: respostasTexto,
+    aceite: "Sim"
   })
+});
   .then(() => {
     document.getElementById("statusEnvio").innerText =
       "Informações enviadas com sucesso.";
