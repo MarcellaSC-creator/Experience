@@ -490,17 +490,17 @@ function startQuiz() {
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
-  const aceite = document.getElementById("aceite").checked;
 
   if (!nome || !email || !telefone) {
     alert("Preencha nome, e-mail e celular para começar.");
     return;
   }
 
-  if (!aceite) {
-    alert("Você precisa aceitar receber informações para continuar.");
-    return;
-  }
+  document.getElementById("lead").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+
+  loadQuestion();
+}
 
   document.getElementById("lead").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
