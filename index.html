@@ -17,8 +17,9 @@ body {
   font-family: Arial, sans-serif;
   background-image: url('fundo.png');
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 body::before {
@@ -30,7 +31,7 @@ body::before {
 }
 
 .container {
-  max-width: 560px;
+  max-width: 620px;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -100,11 +101,17 @@ button:hover {
 .checkbox span {
   display: block;
   width: 100%;
-  max-width: 380px;
+  max-width: 390px;
   font-size: 15px;
   line-height: 1.45;
   text-align: center;
   color: #333;
+}
+
+.note {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
 }
 
 .hidden {
@@ -154,10 +161,62 @@ button:hover {
   margin: 18px 0;
 }
 
+.result-box p {
+  margin: 8px 0;
+}
+
 .status {
   font-size: 13px;
   color: #555;
   margin-top: 14px;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-image: url('fundo.png');
+    background-size: cover;
+    background-position: center top;
+    background-attachment: scroll;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 24px 16px;
+  }
+
+  .card {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  h1 {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .option {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  button {
+    font-size: 15px;
+    padding: 13px;
+  }
+
+  .checkbox span {
+    font-size: 14px;
+  }
 }
 </style>
 </head>
@@ -167,16 +226,16 @@ button:hover {
 <div class="container">
   <div class="card">
 
-    <h1>Descubra qual área da saúde combina mais com você:</h1>
+    <h1>Qual área da saúde realmente combina com você?</h1>
 
     <div id="lead">
       <p>
-Preencha seus dados e responda ao quiz para descobrir sua afinidade com uma das graduações da Faculdade Ciências Médicas de Minas Gerais.
-</p>
+        Preencha seus dados e responda ao quiz para descobrir sua afinidade com uma das graduações da Faculdade Ciências Médicas de Minas Gerais.
+      </p>
 
-<p style="font-size: 13px; color: #555; margin-top: 5px;">
-  <em>* Este quiz não é um teste de aptidão.</em>
-</p>
+      <p class="note">
+        <em>* Este quiz não é um teste de aptidão.</em>
+      </p>
 
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="email" id="email" placeholder="Seu e-mail">
@@ -215,67 +274,133 @@ const questions = [
   {
     q: "Em um ambiente de trabalho ideal, você prefere:",
     o: [
-      { letra: "A", texto: "Cuidar diretamente de pessoas em diferentes estados de saúde" },
-      { letra: "B", texto: "Ajudar na reabilitação física e recuperação de movimentos" },
-      { letra: "C", texto: "Trabalhar com comunicação, voz e expressão" },
-      { letra: "D", texto: "Diagnosticar problemas complexos e tomar decisões críticas" },
-      { letra: "E", texto: "Realizar procedimentos técnicos e trabalhar com precisão manual" },
-      { letra: "F", texto: "Ouvir, acolher e compreender emoções e comportamentos" }
+      { letra: "A", texto: "Estar próximo do paciente, oferecendo cuidado contínuo" },
+      { letra: "B", texto: "Trabalhar com recuperação física e evolução funcional" },
+      { letra: "C", texto: "Estimular comunicação, fala e expressão" },
+      { letra: "D", texto: "Investigar doenças e tomar decisões clínicas" },
+      { letra: "E", texto: "Executar procedimentos técnicos com precisão" },
+      { letra: "F", texto: "Escutar e compreender emoções profundamente" }
     ]
   },
   {
-    q: "Qual dessas atividades mais te atrai?",
+    q: "O que mais te interessa estudar?",
     o: [
-      { letra: "A", texto: "Monitorar pacientes e prestar cuidados contínuos" },
-      { letra: "B", texto: "Aplicar exercícios e terapias físicas" },
-      { letra: "C", texto: "Trabalhar fala, audição e linguagem" },
-      { letra: "D", texto: "Estudar o corpo humano profundamente e investigar doenças" },
-      { letra: "E", texto: "Realizar procedimentos clínicos detalhados" },
-      { letra: "F", texto: "Conversar e ajudar pessoas a lidarem com seus sentimentos" }
+      { letra: "A", texto: "Rotinas de cuidado e suporte ao paciente" },
+      { letra: "B", texto: "Anatomia e movimento do corpo" },
+      { letra: "C", texto: "Linguagem, fala e audição" },
+      { letra: "D", texto: "Funcionamento completo do corpo humano e doenças" },
+      { letra: "E", texto: "Estruturas dentárias e procedimentos clínicos" },
+      { letra: "F", texto: "Comportamento humano e mente" }
     ]
   },
   {
-    q: "Como você costuma lidar com problemas?",
+    q: "Como você reage diante de um problema complexo?",
     o: [
-      { letra: "A", texto: "Com empatia e foco no cuidado imediato" },
-      { letra: "B", texto: "Pensando em soluções práticas e reabilitação" },
-      { letra: "C", texto: "Buscando melhorar a comunicação e compreensão" },
-      { letra: "D", texto: "Investigando causas e tomando decisões assertivas" },
-      { letra: "E", texto: "Agindo com precisão e técnica" },
-      { letra: "F", texto: "Refletindo sobre emoções e comportamentos envolvidos" }
+      { letra: "A", texto: "Busco acolher e resolver de forma prática" },
+      { letra: "B", texto: "Penso em soluções funcionais e progressivas" },
+      { letra: "C", texto: "Tento melhorar a comunicação envolvida" },
+      { letra: "D", texto: "Analiso profundamente antes de decidir" },
+      { letra: "E", texto: "Foco na execução correta e técnica" },
+      { letra: "F", texto: "Avalio o impacto emocional e psicológico" }
     ]
   },
   {
-    q: "Qual habilidade você considera mais forte em você?",
+    q: "Qual habilidade mais te representa?",
     o: [
-      { letra: "A", texto: "Cuidado e atenção ao outro" },
-      { letra: "B", texto: "Coordenação motora e percepção corporal" },
+      { letra: "A", texto: "Cuidado e responsabilidade" },
+      { letra: "B", texto: "Coordenação motora e observação corporal" },
       { letra: "C", texto: "Comunicação e escuta ativa" },
-      { letra: "D", texto: "Raciocínio lógico e tomada de decisão" },
-      { letra: "E", texto: "Habilidade manual e atenção aos detalhes" },
-      { letra: "F", texto: "Empatia e análise emocional" }
+      { letra: "D", texto: "Raciocínio lógico e análise" },
+      { letra: "E", texto: "Precisão e atenção aos detalhes" },
+      { letra: "F", texto: "Empatia e sensibilidade" }
     ]
   },
   {
-    q: "Qual cenário profissional mais te interessa?",
+    q: "Qual cenário te atrai mais?",
     o: [
-      { letra: "A", texto: "Hospital, atuando diretamente com pacientes" },
+      { letra: "A", texto: "Hospital com contato constante com pacientes" },
       { letra: "B", texto: "Clínica de reabilitação ou esportiva" },
-      { letra: "C", texto: "Consultório de linguagem e audição" },
-      { letra: "D", texto: "Hospital ou clínica com foco em diagnóstico e tratamento" },
+      { letra: "C", texto: "Consultório de linguagem" },
+      { letra: "D", texto: "Centro hospitalar ou diagnóstico" },
       { letra: "E", texto: "Consultório odontológico" },
-      { letra: "F", texto: "Consultório ou clínica terapêutica" }
+      { letra: "F", texto: "Clínica terapêutica" }
     ]
   },
   {
-    q: "O que mais te motiva na área da saúde?",
+    q: "O que mais te motiva?",
     o: [
-      { letra: "A", texto: "Cuidar e acompanhar a evolução dos pacientes" },
-      { letra: "B", texto: "Ajudar pessoas a recuperarem movimentos e qualidade de vida" },
-      { letra: "C", texto: "Melhorar a comunicação e inclusão social" },
-      { letra: "D", texto: "Salvar vidas e resolver casos complexos" },
-      { letra: "E", texto: "Transformar sorrisos e saúde bucal" },
-      { letra: "F", texto: "Promover saúde mental e bem-estar emocional" }
+      { letra: "A", texto: "Cuidar de pessoas no dia a dia" },
+      { letra: "B", texto: "Recuperar movimentos e autonomia" },
+      { letra: "C", texto: "Melhorar a comunicação" },
+      { letra: "D", texto: "Resolver casos complexos" },
+      { letra: "E", texto: "Transformar sorrisos" },
+      { letra: "F", texto: "Promover saúde mental" }
+    ]
+  },
+  {
+    q: "Como você prefere ajudar alguém?",
+    o: [
+      { letra: "A", texto: "Estando presente e cuidando" },
+      { letra: "B", texto: "Trabalhando na recuperação física" },
+      { letra: "C", texto: "Facilitando a comunicação" },
+      { letra: "D", texto: "Diagnosticando e tratando" },
+      { letra: "E", texto: "Realizando intervenções técnicas" },
+      { letra: "F", texto: "Acolhendo emocionalmente" }
+    ]
+  },
+  {
+    q: "Você se identifica mais com:",
+    o: [
+      { letra: "A", texto: "Rotina dinâmica e assistencial" },
+      { letra: "B", texto: "Evolução gradual e acompanhamento físico" },
+      { letra: "C", texto: "Desenvolvimento da comunicação" },
+      { letra: "D", texto: "Tomada de decisão sob pressão" },
+      { letra: "E", texto: "Procedimentos detalhados" },
+      { letra: "F", texto: "Conversas profundas e reflexivas" }
+    ]
+  },
+  {
+    q: "Qual dessas características mais combina com você?",
+    o: [
+      { letra: "A", texto: "Dedicação e cuidado" },
+      { letra: "B", texto: "Persistência e prática" },
+      { letra: "C", texto: "Expressividade" },
+      { letra: "D", texto: "Liderança e responsabilidade" },
+      { letra: "E", texto: "Perfeccionismo" },
+      { letra: "F", texto: "Sensibilidade" }
+    ]
+  },
+  {
+    q: "Você prefere trabalhar:",
+    o: [
+      { letra: "A", texto: "Em equipe, com contato constante" },
+      { letra: "B", texto: "Com foco em evolução do paciente" },
+      { letra: "C", texto: "Com foco em comunicação" },
+      { letra: "D", texto: "Liderando decisões clínicas" },
+      { letra: "E", texto: "Com procedimentos técnicos" },
+      { letra: "F", texto: "Em escuta individual" }
+    ]
+  },
+  {
+    q: "Qual tipo de impacto você quer gerar?",
+    o: [
+      { letra: "A", texto: "Cuidado contínuo e suporte" },
+      { letra: "B", texto: "Recuperação física e autonomia" },
+      { letra: "C", texto: "Inclusão por meio da comunicação" },
+      { letra: "D", texto: "Cura e tratamento de doenças" },
+      { letra: "E", texto: "Estética e saúde bucal" },
+      { letra: "F", texto: "Equilíbrio emocional" }
+    ]
+  },
+  {
+    q: "Em situações de pressão, você:",
+    o: [
+      { letra: "A", texto: "Mantém o cuidado e apoio" },
+      { letra: "B", texto: "Foca na solução prática" },
+      { letra: "C", texto: "Busca clareza na comunicação" },
+      { letra: "D", texto: "Toma decisões rápidas" },
+      { letra: "E", texto: "Se concentra na execução" },
+      { letra: "F", texto: "Mantém o equilíbrio emocional" }
     ]
   }
 ];
@@ -283,27 +408,45 @@ const questions = [
 const results = {
   A: {
     curso: "Enfermagem",
-    desc: "Perfil cuidador, atento e essencial no acompanhamento do paciente."
+    desc: "Você tem um perfil cuidador, responsável e essencial. Sua força está na presença constante, no cuidado humano e na atenção aos detalhes do paciente.",
+    diferencial: "Empatia + organização + resistência emocional",
+    ondeAtua: "Hospitais, clínicas, UTI, saúde pública",
+    evolucao: "Especializações em emergência, UTI ou gestão hospitalar"
   },
   B: {
     curso: "Fisioterapia",
-    desc: "Foco em reabilitação, movimento e recuperação funcional."
+    desc: "Seu perfil é prático, focado em evolução e movimento. Você gosta de ver resultados progressivos e transformar a qualidade de vida das pessoas.",
+    diferencial: "Disciplina + visão funcional",
+    ondeAtua: "Clínicas, esportes, reabilitação, hospitais",
+    evolucao: "Fisioterapia esportiva, neurofuncional ou estética"
   },
   C: {
     curso: "Fonoaudiologia",
-    desc: "Interesse por comunicação, linguagem e desenvolvimento humano."
+    desc: "Você se conecta com a comunicação humana. Tem habilidade para ajudar pessoas a se expressarem melhor e se integrarem socialmente.",
+    diferencial: "Escuta + linguagem",
+    ondeAtua: "Clínicas, escolas, hospitais",
+    evolucao: "Voz profissional, linguagem infantil ou audiologia"
   },
   D: {
     curso: "Medicina",
-    desc: "Perfil investigativo, decisivo e voltado para diagnóstico e tratamento."
+    desc: "Perfil analítico, estratégico e decisivo. Você se destaca na investigação, diagnóstico e resolução de problemas complexos.",
+    diferencial: "Raciocínio + liderança",
+    ondeAtua: "Hospitais, clínicas, diversas especialidades",
+    evolucao: "Especializações médicas diversas"
   },
   E: {
     curso: "Odontologia",
-    desc: "Habilidade técnica, precisão e foco em saúde bucal."
+    desc: "Você tem perfil técnico, detalhista e preciso. Gosta de trabalhar com as mãos e ver resultados concretos.",
+    diferencial: "Precisão + estética",
+    ondeAtua: "Consultório próprio ou clínicas",
+    evolucao: "Ortodontia, implantodontia, estética"
   },
   F: {
     curso: "Psicologia",
-    desc: "Afinidade com comportamento humano, escuta e saúde mental."
+    desc: "Seu perfil é emocionalmente inteligente e reflexivo. Você tem facilidade para compreender pessoas e ajudar no desenvolvimento pessoal.",
+    diferencial: "Escuta + análise emocional",
+    ondeAtua: "Clínicas, empresas, escolas",
+    evolucao: "Clínica, organizacional, neuropsicologia"
   }
 };
 
@@ -410,6 +553,9 @@ function showResult() {
 
     <div class="result-box">
       <p>${finalResult.desc}</p>
+      <p><strong>💡 Seu diferencial:</strong> ${finalResult.diferencial}</p>
+      <p><strong>📍 Onde pode atuar:</strong> ${finalResult.ondeAtua}</p>
+      <p><strong>🚀 Possível evolução:</strong> ${finalResult.evolucao}</p>
     </div>
 
     <p>Seus dados foram registrados. Em breve, você poderá receber informações sobre a Faculdade Ciências Médicas de Minas Gerais.</p>
@@ -417,10 +563,10 @@ function showResult() {
     <p class="status" id="statusEnvio">Enviando suas informações...</p>
   `;
 
-  sendToGoogleSheets(finalResult.curso);
+  sendToGoogleSheets(finalResult);
 }
 
-function sendToGoogleSheets(resultado) {
+function sendToGoogleSheets(finalResult) {
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
@@ -437,7 +583,10 @@ ${item.letra}) ${item.resposta}`
       nome: nome,
       email: email,
       telefone: telefone,
-      resultado: resultado,
+      resultado: finalResult.curso,
+      diferencial: finalResult.diferencial,
+      ondeAtua: finalResult.ondeAtua,
+      evolucao: finalResult.evolucao,
       respostas: respostasTexto,
       aceite: "Sim"
     })
