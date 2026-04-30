@@ -81,18 +81,6 @@ button {
   margin-top: 12px;
 }
 
-  .logo {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.logo img {
-  max-width: 220px;
-  width: 100%;
-  height: auto;
-  opacity: 0.9;
-}
-
 button:hover {
   background: #005fa3;
 }
@@ -118,6 +106,17 @@ button:hover {
   line-height: 1.45;
   text-align: center;
   color: #333;
+}
+
+.logo {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.logo img {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
 }
 
 .note {
@@ -229,6 +228,10 @@ button:hover {
   .checkbox span {
     font-size: 14px;
   }
+
+  .logo img {
+    max-width: 200px;
+  }
 }
 </style>
 </head>
@@ -256,16 +259,17 @@ button:hover {
       <label class="checkbox">
         <input type="checkbox" id="aceite">
         <span>
-          Eu aceito receber informações sobre a<br>
+          Aceito receber informações sobre a<br>
           <strong>Faculdade Ciências Médicas de Minas Gerais</strong>
         </span>
       </label>
 
       <button type="button" onclick="startQuiz()">Começar o quiz</button>
+
+      <div class="logo">
+        <img src="logo-cmmg.png" alt="Faculdade Ciências Médicas de Minas Gerais">
+      </div>
     </div>
-    <div class="logo">
-  <img src="logo-cmmg.png" alt="Faculdade Ciências Médicas de Minas Gerais">
-</div>
 
     <div id="quiz" class="hidden">
       <div class="progress">
