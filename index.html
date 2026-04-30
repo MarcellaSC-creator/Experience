@@ -585,6 +585,7 @@ function sendToGoogleSheets(finalResult) {
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
+  const aceite = document.getElementById("aceite").checked ? "Sim" : "Não";
 
   const respostasTexto = answers.map((item, index) =>
     `${index + 1}. ${item.pergunta}
@@ -603,7 +604,7 @@ ${item.letra}) ${item.resposta}`
       ondeAtua: finalResult.ondeAtua,
       evolucao: finalResult.evolucao,
       respostas: respostasTexto,
-      aceite: "Sim"
+      aceite: aceite
     })
   })
   .then(() => {
